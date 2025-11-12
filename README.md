@@ -1,218 +1,182 @@
-# Java Spring Boot CRUD API
+<p align="center">
+  <img src="https://spring.io/img/projects/spring-boot.svg" alt="Spring Boot" height="80"/>
+  <img src="https://www.postgresql.org/media/img/about/press/elephant.png" alt="PostgreSQL" height="80"/>
+</p>
 
-A simple Todo management REST API built with Spring Boot, featuring full CRUD operations for managing todo items.
+# Java Spring Boot CRUD API with JWT Authentication & PostgreSQL
 
-## 🚀 Features
+A secure REST API for Todo management, featuring user registration and login with JWT authentication and password encryption. Data is stored persistently in PostgreSQL and follows a clean and scalable project architecture.
 
-- **Create** new todo items
-- **Read** todo items (single and all)
-- **Update** existing todo items
-- **Delete** todo items
-- In-memory H2 database for development
-- RESTful API endpoints
-- Lombok for reducing boilerplate code
-
-## 🛠️ Tech Stack
-
-- **Java 25**
-- **Spring Boot 3.5.6**
-- **Spring Data JPA**
-- **H2 Database** (in-memory)
-- **Lombok**
-- **Maven** (build tool)
-
-## 📋 Prerequisites
-
-- Java 25 or higher
-- Maven 3.6 or higher
-- IDE (IntelliJ IDEA, Eclipse, or VS Code)
+---
 
 ## 🏗️ Project Structure
 
-```
-src/
-├── main/
-│   ├── java/dev/codeIO/HelloWorld/
-│   │   ├── HelloWorldApplication.java    # Main Spring Boot application
-│   │   ├── HelloWorldController.java     # REST controller for API endpoints
-│   │   ├── TodoService.java              # Business logic layer
-│   │   ├── TodoRepository.java           # Data access layer
-│   │   └── models/
-│   │       └── Todo.java                 # Todo entity model
-│   └── resources/
-│       └── application.properties        # Application configuration
-└── test/
-    └── java/dev/codeIO/HelloWorld/
-        └── HelloWorldApplicationTests.java
-```
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd Java-Springboot-CRUD-API-master
-```
-
-### 2. Build the Project
-```bash
-mvn clean install
-```
-
-### 3. Run the Application
-```bash
-mvn spring-boot:run
-```
-
-The application will start on **port 8081**.
-
-### 4. Access H2 Database Console
-- URL: `http://localhost:8081/h2-console`
-- JDBC URL: `jdbc:h2:mem:tododb`
-- Username: `admin`
-- Password: `1234`
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description | Request Body |
-|--------|----------|-------------|--------------|
-| `POST` | `/todo/create` | Create a new todo | `{"title": "string", "description": "string", "isCompleted": boolean}` |
-| `GET` | `/todo/{id}` | Get todo by ID | - |
-| `GET` | `/todo` | Get all todos | - |
-| `PUT` | `/todo` | Update a todo | `{"id": long, "title": "string", "description": "string", "isCompleted": boolean}` |
-| `DELETE` | `/todo/{id}` | Delete todo by ID | - |
-
-## 📝 Todo Model
-
-```java
-@Entity
-@Data
-public class Todo {
-    @Id
-    @GeneratedValue
-    Long id;
-    String title;
-    String description;
-    Boolean isCompleted;
-}
+```text
+HelloWorld/
+├── .idea/
+├── .mvn/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── dev.codeIO.HelloWorld/
+│   │   │        ├── controller/
+│   │   │        │     ├── AuthController
+│   │   │        │     └── HelloWorldController
+│   │   │        ├── models/
+│   │   │        │     ├── Todo
+│   │   │        │     └── User
+│   │   │        ├── repository/
+│   │   │        │     ├── TodoRepository
+│   │   │        │     └── UserRepository
+│   │   │        ├── service/
+│   │   │        │     ├── TodoService
+│   │   │        │     └── UserService
+│   │   │        └── utils/
+│   │   │              ├── HelloWorldApplication
+│   │   │              ├── JwtFilter
+│   │   │              └── SecurityConfig
+│   │   ├── resources/
+│   │   │   ├── static/
+│   │   │   ├── templates/
+│   │   │   └── application.properties
+│   ├── test/
+├── target/
+├── .gitattributes
+├── .gitignore
+├── HELP.md
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
 ```
 
-## 🔧 Configuration
+---
 
-The application is configured in `application.properties`:
+## 🚀 Features
 
-```properties
-spring.application.name=HelloWorld
+- JWT-based user authentication (register, login)
+- Passwords are securely encrypted
+- CRUD operations for Todos (Create, Read, Update, Delete)
+- Persistent PostgreSQL storage
+- Layered architecture for extensibility & maintainability
+- RESTful endpoints & DTO usage
+- Easy integration and future scalability
+
+---
+
+## 🛠️ Tech Stack
+
+- Java (Spring Boot)
+- PostgreSQL
+- JWT (JSON Web Token)
+- Spring Security
+- Lombok
+- Maven
+
+---
+
+## 📋 Prerequisites
+
+- Java 17+
+- Maven 3.6+
+- PostgreSQL instance (with credentials)
+- Any IDE (IntelliJ, Eclipse, VS Code, etc.)
+
+---
+
+## 📝 API Endpoints Overview
+
+| Method   | Endpoint             | Description                  |
+|----------|----------------------|------------------------------|
+| POST     | /auth/register       | Register new user            |
+| POST     | /auth/login          | User login & JWT generation  |
+| POST     | /todo/create         | Create new todo              |
+| GET      | /todo/{id}           | Get todo by ID               |
+| GET      | /todo                | Get all todos                |
+| PUT      | /todo                | Update todo                  |
+| DELETE   | /todo/{id}           | Delete todo by ID            |
+
+*All /todo endpoints require JWT in the Authorization header.*
+
+---
+
+## 🔐 Authentication
+
+- **Register** with `/auth/register`
+- **Login** via `/auth/login` to receive your JWT token
+- Use JWT for all protected endpoints:  
+  `Authorization: Bearer <your-jwt-token>`
+- Passwords are securely hashed before being stored—never exposed as plaintext.
+
+---
+
+## 📝 Configuration Example
+
+Adjust your `src/main/resources/application.properties`:
+
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/tododb
+spring.datasource.username=YOUR_DB_USER
+spring.datasource.password=YOUR_DB_PASSWORD
+spring.jpa.hibernate.ddl-auto=update
 server.port=8081
-
-# H2 Database Configuration
-spring.datasource.url=jdbc:h2:mem:tododb
-spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username=admin
-spring.datasource.password=1234
-
-# H2 Console
-spring.h2.console.enabled=true
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-spring.hibernate.ddl-auto=update
+jwt.secret=YOUR_SECRET_KEY
 ```
 
-## 📚 Example Usage
-
-### Create a Todo
-```bash
-curl -X POST http://localhost:8081/todo/create \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Learn Spring Boot",
-    "description": "Complete Spring Boot tutorial",
-    "isCompleted": false
-  }'
-```
-
-### Get All Todos
-```bash
-curl -X GET http://localhost:8081/todo
-```
-
-### Get Todo by ID
-```bash
-curl -X GET http://localhost:8081/todo/1
-```
-
-### Update a Todo
-```bash
-curl -X PUT http://localhost:8081/todo \
-  -H "Content-Type: application/json" \
-  -d '{
-    "id": 1,
-    "title": "Learn Spring Boot - Updated",
-    "description": "Complete Spring Boot tutorial - Done!",
-    "isCompleted": true
-  }'
-```
-
-### Delete a Todo
-```bash
-curl -X DELETE http://localhost:8081/todo/1
-```
+---
 
 ## 🧪 Testing
 
-Run the test suite:
+Run all tests:
+
 ```bash
 mvn test
 ```
 
-## 📦 Dependencies
+---
 
-- **spring-boot-starter-web**: Web framework
-- **spring-boot-starter-data-jpa**: JPA and Hibernate
-- **h2**: In-memory database
-- **lombok**: Reduces boilerplate code
-- **spring-boot-starter-test**: Testing framework
+## 📦 How Components Work
 
-## 🔍 Key Components
-
-### HelloWorldController
-REST controller handling HTTP requests and responses for todo operations.
-
-### TodoService
-Business logic layer containing methods for CRUD operations.
-
-### TodoRepository
-Data access layer extending JpaRepository for database operations.
-
-### Todo Entity
-JPA entity representing the todo model with Lombok annotations.
-
-## 🚀 Development
-
-### Adding New Features
-1. Create new endpoints in `HelloWorldController`
-2. Add business logic in `TodoService`
-3. Extend `TodoRepository` if needed
-4. Update the `Todo` entity for new fields
-
-### Database Schema
-The application uses H2 in-memory database with auto-update schema. Tables are created automatically based on JPA entities.
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📞 Support
-
-For questions or support, please open an issue in the repository.
+- **controller:** REST endpoints (AuthController, HelloWorldController)
+- **models:** JPA entities (User, Todo)
+- **repository:** Data access (UserRepository, TodoRepository)
+- **service:** Business logic (UserService, TodoService)
+- **utils:** Application entry, JWT filter, security config
 
 ---
 
-**Happy Coding! 🎉**
+## 🚀 Getting Started
+
+1. Clone the repository
+2. Adjust the config file for PostgreSQL and JWT secret
+3. Build and run:
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+4. Access API at `http://localhost:8081`
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+## 🤝 Contributing
+
+- Fork, branch, commit, pull request
+- Share tests and clear documentation for new features
+
+---
+
+## 📞 Support
+
+Open a GitHub issue for help or requests.
+
+---
+
+**Happy Coding! 🚀**
