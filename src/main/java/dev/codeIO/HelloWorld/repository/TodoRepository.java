@@ -1,11 +1,13 @@
-package dev.codeIO.HelloWorld;
+package dev.codeIO.HelloWorld.repository;
 
 import dev.codeIO.HelloWorld.models.Todo;
-import org.springframework.context.annotation.Bean;
+import dev.codeIO.HelloWorld.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 //CRUD - create read update delete
 public interface TodoRepository extends JpaRepository<Todo, Long> {
+
 
 }
