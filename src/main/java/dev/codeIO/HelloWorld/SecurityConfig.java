@@ -39,7 +39,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+        corsConfiguration.setAllowedOrigins(
+                List.of(
+                        "https://rosh-codes.github.io",
+                        "https://rosh-codes.github.io/Event-Organiser"
+                )
+        );
+
         corsConfiguration.setAllowedMethods(List.of("GET","POST","PATCH","DELETE","PATCH"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
